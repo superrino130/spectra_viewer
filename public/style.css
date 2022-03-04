@@ -1,0 +1,13 @@
+h1 {
+    color: brown;
+}
+body {
+    background-color: lightyellow;
+}
+.world {
+    border-radius: 240px 15px 100px 15px / 15px 200px 15px 185px;
+    width: 900px;
+    height: 500px;
+    padding: 4%;
+    margin: 10px;
+}

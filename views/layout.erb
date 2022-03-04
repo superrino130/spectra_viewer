@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['geochart']});
+      google.charts.setOnLoadCallback(drawRegionsMap);
+      function selectHandler(reg) {
+        if(reg.region=='JP') {
+          location.href = '/jpost';
+        } else {
+          alert('Please select Japan');
+        }
+      }
+      function drawRegionsMap() {
+        var data = google.visualization.arrayToDataTable([
+          ['Country', 'org'],
+          ['United States', 'PeptideAtlas, MassIVE, Panorama'],
+          ['United Kingdom', 'PRIDE'],
+          ['China', 'iProX'],
+          ['Japan', 'jPOST']
+        ]);
+
+        var options = {
+          backgroundColor: '#71c4ea',
+          defaultColor: '#22aa22'
+        };
+        var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
+        google.visualization.events.addListener(chart, 'regionClick', selectHandler);
+        chart.draw(data, options);
+      }
+    </script>
+  </head>
+  <body>
+    <h1>spectra viewer --demo--</h1>
+    <%= yield %>
+  </body>
+</html>
