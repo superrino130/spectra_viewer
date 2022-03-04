@@ -1,0 +1,46 @@
+<table class="table table-striped table-light table-hover">
+  <tbody>
+    <tr>
+      <th>title</th>
+      <td>
+        <%= @data['title'] %>
+      </td>
+    </tr>
+    <tr>
+      <th>pxid</th>
+      <td>
+        <%= @pxd %>
+      </td>
+    </tr>
+    <tr>
+      <th>description</th>
+      <td>
+        <%= @data['description'] %>
+      </td>
+    </tr>
+    <tr>
+      <th>contact name</th>
+      <td>
+        <%= @data['contact name'].join(', ') %>
+      </td>
+    </tr>
+    <tr>
+      <th>keywords</th>
+      <td>
+        "<%= @data['keywords'].join('", "').gsub(';', '", "') %>"
+      </td>
+    </tr>
+    <tr>
+      <th>species</th>
+      <td>
+        "<%= @data['species'].join('", "').gsub(';', '", "') %>"
+      </td>
+    </tr>
+    <tr>
+      <th>Peak list file URI</th>
+      <td>
+        <%= @data['Peak list file URI'].join('<br') %>
+      </td>
+    </tr>
+  </tbody>
+</table>

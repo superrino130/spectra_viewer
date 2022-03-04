@@ -1,9 +1,12 @@
-<a href="https://repository.jpostdb.org/proxi/spectra?usi=mzspec:PXD005159:150211tk04-whole_2m8h-3.wizd:scan:2&resultType=full" target="_blank" rel="noopener noreferrer">150211tk04-whole_2m8h-3</a>
-
-<div class="pxds">
-  <% if @pxds %>
-    <% @pxds.each do |x| %>
-      <%= x %><p>
-    <% end %>
+<table class="table table-striped table-light table-hover">
+  <tbody>
+  <% @data.sort.select{ _1[0] > 'PXD005158'}.to_h.each do |re| %>
+    <tr><td>
+    <%= re[1]['title'] %><br>
+    <a href="<%= "/jpost/" + re[0] %>">details</a><br>
+    species: "<%= re[1]['species'].join('", "').gsub(';', '", "') %>"<br>
+    keywords: "<%= re[1]['keywords'].join('", "').gsub(';', '", "') %>"
+    </td></tr>
   <% end %>
-</div>
+  </tbody>
+</table>
