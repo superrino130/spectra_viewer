@@ -21,6 +21,11 @@ module ReadDatasets
               info[@pxd] = {}
             end
           end
+          v.each do |ve|
+            if ve['name'] == 'jPOST dataset identifier'
+              info[@pxd]['jpd'] = ve['value']
+            end
+          end
         when 'title'
           info[@pxd]['title'] = v
         when 'description'
@@ -40,13 +45,15 @@ module ReadDatasets
           end
         when 'species'
           info[@pxd]['species'] ||= []
-          v.each do |ve|
+          v[0]['terms'].each do |ve|
             info[@pxd]['species'] << ve['value']
           end
         when 'datasetFiles'
           info[@pxd]['Peak list file URI'] ||= []
           v.each do |ve|
-            info[@pxd]['Peak list file URI'] << ve['value'].split('/')[-1]
+            if ve['value'].split('/')[-1].split('.')[-1] == 'mgf'
+              info[@pxd]['Peak list file URI'] << ve['value'].split('/')[-1].split('.')[0...-1].join('.')
+            end
           end
         end
       end

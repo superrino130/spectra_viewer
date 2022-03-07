@@ -1,17 +1,18 @@
 require 'net/http'
-require 'json'
+require 'uri'
 
 module ReadJson
   module_function
 
-  def read_uri
-    url = 'https://repository.jpostdb.org/proxi/spectra?usi=mzspec:PXD005159:150211tk04-whole_2m8h-3.wizd:scan:2&resultType=full'
-
+  def read_uri(url)
     uri = URI.parse(url)
-    res = Net::HTTP.get_response(uri)
-    raise "Not Connected by Code #{res.code.to_i}." if res.code.to_i != 200
+    res = Net::HTTP.get(uri)
+    # res = Net::HTTP.get_response(uri)
+    # raise "Not Connected by Code #{res.code.to_i}." if res.code.to_i != 200
+    return res
     
-    json_data = JSON.parse(res.body)
+    json_data = JSON.parse(res)
+
     
     mzs = []
     its = []

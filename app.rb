@@ -8,6 +8,7 @@ require 'date'
 require_relative 'chart'
 require_relative 'readjson'
 require_relative 'readdatasets'
+require_relative 'public/jpostid'
 
 @@datasets = {}
 
@@ -37,13 +38,24 @@ get '/jpost2' do
   erb :jpost
 end
 
+get '/jpost/:pxd/:peaklistfile' do
+  if params['pxd'] && params['peaklistfile']
+    scanid = Jpostdb::Table[params['pxd']][params['peaklistfile']]
+    return 'bad request 44' if scanid.nil?
+    url = "https://repository.jpostdb.org/proxi/spectra?usi=mzspec:#{params['pxd']}:#{params['peaklistfile']}:scan:#{scanid}&resultType=full"
+    mzs, its = ReadJson.read_uri(url)
+  else
+    'bad request 48'
+  end
+end
+
 get '/jpost/:pxd' do
   if params['pxd'] && @@datasets.include?(params['pxd'])
     @data = @@datasets[params['pxd']]
     @pxd = params['pxd']
     erb :details
   else
-    'bad id'
+    'bad request 58'
   end
 end
 
@@ -54,6 +66,8 @@ get '/jpost' do
 end
 
 get '/' do
+  @@datasets.clear
+
   erb :index
 end
 
