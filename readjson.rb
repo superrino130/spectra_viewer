@@ -5,6 +5,13 @@ require 'json'
 module ReadJson
   module_function
 
+  def check_uri(url)
+    uri = URI.parse(url)
+    res = Net::HTTP.get_response(uri)  
+    json_data = JSON.parse(res.body)
+    json_data == {"status"=>404, "title"=>"Not Found"} ? false : true
+  end
+  
   def read_uri(url)
     uri = URI.parse(url)
     res = Net::HTTP.get(uri)

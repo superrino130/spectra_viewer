@@ -11,17 +11,53 @@ require_relative 'public/jpostid'
 
 @@datasets = {}
 
-get '/jpost/:pxd/:peaklistfile' do
-  if params['pxd'] && params['peaklistfile']
-    scanid = Jpostdb::Table[params['pxd']][params['peaklistfile']]
-    return 'bad request 44' if scanid.nil?
+get '/jpost/:pxd/:peaklistfile/:scanid' do
+  if params['pxd'] && params['peaklistfile'] && params['scanid']
+    scanid = params['scanid']
+    return 'bad request 17' if scanid.nil?
     @url = "https://repository.jpostdb.org/proxi/spectra?usi=mzspec:#{params['pxd']}:#{params['peaklistfile']}:scan:#{scanid}&resultType=full"
     @data = ReadJson.read_uri(@url)
     @title = @@datasets[params['pxd']]['title']
     @jpd = @@datasets[params['pxd']]['jpd']
+    if ReadJson.check_uri("https://repository.jpostdb.org/proxi/spectra?usi=mzspec:#{params['pxd']}:#{params['peaklistfile']}:scan:#{scanid.to_i.next}&resultType=full")
+      @nextdata = "/jpost/#{params['pxd']}/#{params['peaklistfile']}/#{scanid.to_i.next}"
+    else
+      @nextdata = nil
+    end
+    if ReadJson.check_uri("https://repository.jpostdb.org/proxi/spectra?usi=mzspec:#{params['pxd']}:#{params['peaklistfile']}:scan:#{scanid.to_i.pred}&resultType=full")
+      @preddata = "/jpost/#{params['pxd']}/#{params['peaklistfile']}/#{scanid.to_i.pred}"
+    else
+      @preddata = nil
+    end
+    @returnurl = "/jpost/#{params['pxd']}"
     erb :scatterg
   else
-    'bad request 23'
+    'bad request 24'
+  end
+end
+
+get '/jpost/:pxd/:peaklistfile' do
+  if params['pxd'] && params['peaklistfile']
+    scanid = Jpostdb::Table[params['pxd']][params['peaklistfile']]
+    return 'bad request 31' if scanid.nil?
+    @url = "https://repository.jpostdb.org/proxi/spectra?usi=mzspec:#{params['pxd']}:#{params['peaklistfile']}:scan:#{scanid}&resultType=full"
+    @data = ReadJson.read_uri(@url)
+    @title = @@datasets[params['pxd']]['title']
+    @jpd = @@datasets[params['pxd']]['jpd']
+    if ReadJson.check_uri("https://repository.jpostdb.org/proxi/spectra?usi=mzspec:#{params['pxd']}:#{params['peaklistfile']}:scan:#{scanid.to_i.next}&resultType=full")
+      @nextdata = "/jpost/#{params['pxd']}/#{params['peaklistfile']}/#{scanid.to_i.next}"
+    else
+      @nextdata = nil
+    end
+    if ReadJson.check_uri("https://repository.jpostdb.org/proxi/spectra?usi=mzspec:#{params['pxd']}:#{params['peaklistfile']}:scan:#{scanid.to_i.pred}&resultType=full")
+      @preddata = "/jpost/#{params['pxd']}/#{params['peaklistfile']}/#{scanid.to_i.pred}"
+    else
+      @preddata = nil
+    end
+    @returnurl = "/jpost"
+    erb :scatterg
+  else
+    'bad request 38'
   end
 end
 
@@ -31,7 +67,7 @@ get '/jpost/:pxd' do
     @pxd = params['pxd']
     erb :details
   else
-    'bad request 33'
+    'bad request 48'
   end
 end
 

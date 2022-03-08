@@ -18,6 +18,28 @@
                     <a href=<%= @url %> target="_blank" rel="noopener"><%= @url %></a>
                 </td>
             </tr>
+            <tr>
+                <th>
+                    <% if @preddata %>
+                    <a href=<%= @preddata %>>preddata</a>
+                    <% else %>
+                        preddata
+                    <% end %>
+                </th>
+                <td>
+                    <% if @preddata %>
+                    <a href=<%= @nextdata %>>nextdata</a>
+                    <% else %>
+                        nextdata
+                    <% end %>
+                </td>
+            </tr>
+            <tr>
+                <th>return</th>
+                <td>
+                    <a href=<%= @returnurl %>><%= @returnurl %></a>
+                </td>
+            </tr>
         </tbody>
     </table>
 
@@ -36,7 +58,7 @@
     
             var options = {
                 // title: 'peak view',
-                hAxis: {title: 'm/z'},
+                hAxis: {title: 'm/z', minValue:0, maxValue:1200},
                 vAxis: {title: 'intensities', minValue:0, maxValue:0.8},
                 legend: 'none',
                 lineWidth: 1,
