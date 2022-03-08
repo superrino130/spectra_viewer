@@ -52,7 +52,9 @@
                 ['mzs', 'intensities'],
                 <% maxi = @data.map{ _2 }.max %>
                 <% @data.each do |d| %>
+                  <%= "[#{d[0]}, 0]," %>
                   <%= "[#{d[0]}, #{d[1] / maxi}]," %>
+                  <%= "[#{d[0]}, 0]," %>
                 <% end %>
             ]);
     
@@ -62,7 +64,8 @@
                 vAxis: {title: 'intensities', minValue:0, maxValue:0.8},
                 legend: 'none',
                 lineWidth: 1,
-                curveType: 'function'
+                showLine: true,
+                pointSize: 1
             };
     
             var chart = new google.visualization.ScatterChart(document.getElementById('gct_sample_scatter'));
