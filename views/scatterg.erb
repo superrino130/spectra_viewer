@@ -1,0 +1,51 @@
+    <table class="table table-striped table-light table-hover">
+        <tbody>
+            <tr>
+                <th>title</th>
+                <td>
+                    <%= @title %>
+                </td>
+            </tr>
+            <tr>
+                <th>jpost repository</th>
+                <td>
+                    <a href=<%= "https://repository.jpostdb.org/entry/" + @jpd %> target="_blank" rel="noopener"><%= "https://repository.jpostdb.org/entry/" + @jpd %></a>
+                </td>
+            </tr>
+            <tr>
+                <th>dataset</th>
+                <td>
+                    <a href=<%= @url %> target="_blank" rel="noopener"><%= @url %></a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+    google.load("visualization", "1", {packages:["corechart"]});
+    google.setOnLoadCallback(
+        function () {
+            var data = google.visualization.arrayToDataTable([
+                ['mzs', 'intensities'],
+                <% maxi = @data.map{ _2 }.max %>
+                <% @data.each do |d| %>
+                  <%= "[#{d[0]}, #{d[1] / maxi}]," %>
+                <% end %>
+            ]);
+    
+            var options = {
+                // title: 'peak view',
+                hAxis: {title: 'm/z'},
+                vAxis: {title: 'intensities', minValue:0, maxValue:0.8},
+                legend: 'none',
+                lineWidth: 1,
+                curveType: 'function'
+            };
+    
+            var chart = new google.visualization.ScatterChart(document.getElementById('gct_sample_scatter'));
+            chart.draw(data, options);
+        }
+    );
+</script>
+<div id="gct_sample_scatter" style="height:400pt" ></div>

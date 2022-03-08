@@ -1,5 +1,6 @@
 require 'net/http'
 require 'uri'
+require 'json'
 
 module ReadJson
   module_function
@@ -7,22 +8,16 @@ module ReadJson
   def read_uri(url)
     uri = URI.parse(url)
     res = Net::HTTP.get(uri)
-    # res = Net::HTTP.get_response(uri)
-    # raise "Not Connected by Code #{res.code.to_i}." if res.code.to_i != 200
-    return res
     
-    json_data = JSON.parse(res)
-
+    json_data = JSON.parse(res.chomp)
     
-    mzs = []
-    its = []
+    mzs_its = []
     json_data[0]['mzs'].zip(json_data[0]['intensities']).each do |m, i|
       case m.to_f
       when 0...1500
-        mzs << m.to_f
-        its << i.to_f
+        mzs_its << [m.to_f, i.to_f]
       end
     end
-    [mzs, its]
+    mzs_its
   end
 end

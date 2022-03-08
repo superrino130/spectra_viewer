@@ -12,40 +12,17 @@ require_relative 'public/jpostid'
 
 @@datasets = {}
 
-get '/jpost2' do
-  mzs, its = ReadJson.read_uri
-  column = [{'string' => 'm/z'},{'number' => 'intensty'}]
-  data = {}
-  0.upto(1500) do |x|
-    data[x] = 0
-  end
-  itsmax = its.max
-  mzs.zip(its).each do |x, y|
-    data[x] = (y / itsmax.to_f * 100).round(3) if x <= 1500
-  end
-  # options = [{'width' => 800},{'height' => 600}]
-  options = [{'width' => 4800},{'height' => 600}]
-  name = 'bar_chart'
-  row = []
-  data.sort_by{ _1 }.each do |k, v|
-    row << {k => v}
-  end
-  
-  pc = BarChart.new(column,row,options,name)
-  @header = pc.header_script
-  @body = pc.body_script   
-  
-  erb :jpost
-end
-
 get '/jpost/:pxd/:peaklistfile' do
   if params['pxd'] && params['peaklistfile']
     scanid = Jpostdb::Table[params['pxd']][params['peaklistfile']]
     return 'bad request 44' if scanid.nil?
-    url = "https://repository.jpostdb.org/proxi/spectra?usi=mzspec:#{params['pxd']}:#{params['peaklistfile']}:scan:#{scanid}&resultType=full"
-    mzs, its = ReadJson.read_uri(url)
+    @url = "https://repository.jpostdb.org/proxi/spectra?usi=mzspec:#{params['pxd']}:#{params['peaklistfile']}:scan:#{scanid}&resultType=full"
+    @data = ReadJson.read_uri(@url)
+    @title = @@datasets[params['pxd']]['title']
+    @jpd = @@datasets[params['pxd']]['jpd']
+    erb :scatterg
   else
-    'bad request 48'
+    'bad request 23'
   end
 end
 
@@ -55,7 +32,7 @@ get '/jpost/:pxd' do
     @pxd = params['pxd']
     erb :details
   else
-    'bad request 58'
+    'bad request 33'
   end
 end
 
