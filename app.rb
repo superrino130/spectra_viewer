@@ -54,7 +54,7 @@ get '/jpost/:pxd/:peaklistfile' do
     else
       @preddata = nil
     end
-    @returnurl = "/jpost"
+    @returnurl = "/jpost/#{params['pxd']}"
     erb :scatterg
   else
     'bad request 38'
