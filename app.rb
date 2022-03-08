@@ -1,7 +1,6 @@
 require 'sinatra'
 require 'sinatra/reloader'
 require 'net/http'
-# require 'chartkick'
 
 require 'erb'
 require 'date'
