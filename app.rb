@@ -32,14 +32,14 @@ get '/jpost/:pxd/:peaklistfile/:scanid' do
     @returnurl = "/jpost/#{params['pxd']}"
     erb :scatterg
   else
-    'bad request 24'
+    'bad request 35'
   end
 end
 
 get '/jpost/:pxd/:peaklistfile' do
   if params['pxd'] && params['peaklistfile']
     scanid = Jpostdb::Table[params['pxd']][params['peaklistfile']]
-    return 'bad request 31' if scanid.nil?
+    return 'bad request 42' if scanid.nil?
     @url = "https://repository.jpostdb.org/proxi/spectra?usi=mzspec:#{params['pxd']}:#{params['peaklistfile']}:scan:#{scanid}&resultType=full"
     @data = ReadJson.read_uri(@url)
     @title = @@datasets[params['pxd']]['title']
@@ -57,7 +57,7 @@ get '/jpost/:pxd/:peaklistfile' do
     @returnurl = "/jpost/#{params['pxd']}"
     erb :scatterg
   else
-    'bad request 38'
+    'bad request 60'
   end
 end
 
@@ -67,7 +67,7 @@ get '/jpost/:pxd' do
     @pxd = params['pxd']
     erb :details
   else
-    'bad request 48'
+    'bad request 70'
   end
 end
 
@@ -79,10 +79,9 @@ end
 
 get '/' do
   @@datasets.clear
-
   erb :index
 end
 
-error 400..510 do
-  'Protein deficiency'
+error do
+  'Error! Protein deficiency'
 end
